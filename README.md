@@ -1,0 +1,1 @@
+# A linker prepared for node to use C library -- ncurses
