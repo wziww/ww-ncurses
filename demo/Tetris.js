@@ -35,7 +35,6 @@ class base {
         this.y = failY;
         this.index = 0;
     }
-    top() {}
     left() {
         this.y--;
         for (let i = 0; i < this.points.length; i++) {
@@ -274,14 +273,15 @@ class L extends base {
         this.points = _points;
     }
 }
+let _NODES = [O, T, I, Z, L];
 ncurses.initscr();
 ncurses.start_color();
 ncurses.use_default_colors();
 ncurses.init_pair(READ_SNACK, ncurses.COLOR_RED, ncurses.COLOR_BLACK);
 
-for (let i = 0; i < WINDOW_WIDTH; i++) {
+for (let i = 0; i < WINDOW_HEIGHT - _LINE; i++) {
     points[i] = [];
-    for (let z = 0; z < WINDOW_HEIGHT - _LINE; z++) {
+    for (let z = 0; z < WINDOW_WIDTH; z++) {
         points[i][z] = false;
     }
 }
@@ -319,7 +319,6 @@ function _refresh() {
     }
     //left line
     for (let i = 1; i < WINDOW_HEIGHT - _LINE; i++) {
-        // ncurses.mvaddch(i, 0, "*".charCodeAt(0));
         points[i][0] = true;
     }
     //right line
@@ -330,16 +329,37 @@ function _refresh() {
 }
 _refresh();
 draw();
+const delLine = (INDEX, bool) => {
+    if (!bool) return;
+    for (let i = INDEX; i > 1; i--) {
+        for (let z = 1; z < WINDOW_WIDTH - 1; z++) {
+            points[i][z] = points[i - 1][z];
+        }
+    }
+    return draw();
+}
+const checkScore = () => {
+    for (let i = points.length - 2; i > 1; i--) {
+        let del = true;
+        for (let z = 1; z < WINDOW_WIDTH - 1; z++) {
+            if (!points[i][z]) del = false;
+        }
+        delLine(i, del);
+        if (del) i++;
+    }
+}
 const move = (cmd, _class) => {
     _refresh
     switch (cmd) {
         case ncurses.KEY_DOWN:
             if (_class.down() === 'new') {
-                let _NODES = [O, T, I, Z, L]
                 CURRENT_NODE = new _NODES[parseInt(Math.random() * 50) % 5]();
                 _class = CURRENT_NODE;
+                checkScore();
+                _class.draw();
+            } else {
+                _class.draw()
             }
-            _class.draw();
             break;
         case ncurses.KEY_UP:
             _class.top();
@@ -357,10 +377,9 @@ const move = (cmd, _class) => {
             return;
     }
 }
-let C = new L();
+const z = _NODES[parseInt(Math.random() * 50) % 5];
+let C = new z();
 CURRENT_NODE = C;
-C.draw();
-
 if (cluster.isMaster) {
     const quit = () => {
         const spawn = child_process.spawnSync;
@@ -370,7 +389,7 @@ if (cluster.isMaster) {
     }
     setInterval(() => {
         if (move(ncurses.KEY_DOWN, CURRENT_NODE) === 'q') return quit();
-    }, 700);
+    }, 300);
     // setInterval(() => {}, 1000);
     const child = cluster.fork();
     process.on('uncaughtException', function (err) {
