@@ -6,6 +6,11 @@ npm install ww-ncurses --save
 var ncurses = require('ww-ncurses');
 ncurses.initsrc();
 ```
+## 基本概念
+方向：· → y
+     ↓
+     x
+终端左上角坐标为 (0,0)
 ### API 基本使用方式同步于 ncurses 在 C/CPP 中的使用方式
 
 #### 窗口相关
@@ -16,7 +21,11 @@ ncurses.initsrc();
 - endwin()              结束窗口
 - refresh()             将缓冲区内字符显示到窗口上
 #### 输入相关
-
+- addch(char)               添加「单个」字符
+- mvaddch(int,int,char)     move & add
+```
+ncurses.addch('*');
+```
 #### 光标相关
 - hide_cur(int)         0 隐藏光标 1 显示光标
 ```
@@ -27,7 +36,7 @@ ncurses.hide_cur(1);
 - A_BOLD                加粗
 - A_UNDERLINE           下划线
 ```
-用法：ncurses.mvaddch(10, 10,"*".charCodeAt(0) | ncurses.A_UNDERLINE);
+用法：ncurses.mvaddch(10, 10,'*'.charCodeAt(0) | ncurses.A_UNDERLINE);
 ```
 #### 按键相关
 - KEY_DOWN
