@@ -21,11 +21,24 @@ ncurses.initsrc();
 - endwin()              结束窗口
 - refresh()             将缓冲区内字符显示到窗口上
 #### 输入相关
-- addch(char)               添加「单个」字符
-- mvaddch(int,int,char)     move & add
+- addch(char)           添加「单个」字符
 ```
-ncurses.addch('*');
+ncurses.addch('*'.charCodeAt(0));
 ```
+- mvaddch(int,int,char) move & add
+```
+ncurses.addch(0,0'*'.charCodeAt(0));
+```
+- getch()               获取用户输入
+```
+var cmd = ncurses.getch();
+ <= 1
+cmd === 1;
+```
+- noecho()              隐藏用户输入的字符 // 使用场景：例如输入密码时不显示用户输入
+- cbreak()              禁止行缓冲（line buffering）// 如 处理挂起（CTRLZ）、中断或退出（CTRLC）等控制字符 交由程序处理而不产生终端信号
+- keypad()              使当前输入允许使用功能键/整合键  // 如 方向键上下左右，@#￥这些特殊字符
+激活后，getch() 等函数会返回 ncurses 定义的特殊常量   具体可查看 demo 下两个小游戏，关于方向键是如何处理的
 #### 光标相关
 - hide_cur(int)         0 隐藏光标 1 显示光标
 ```
