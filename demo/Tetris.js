@@ -9,7 +9,6 @@
 const ncurses = require('../build/Release/ncurses.node');
 const cluster = require('cluster');
 const child_process = require('child_process');
-const _LINE = 1;
 const WINDOW_WIDTH = 20; //ncurses.col();
 const WINDOW_HEIGHT = ncurses.row();
 const failX = 1;
@@ -279,12 +278,6 @@ ncurses.start_color();
 ncurses.use_default_colors();
 ncurses.init_pair(READ_SNACK, ncurses.COLOR_RED, ncurses.COLOR_BLACK);
 
-for (let i = 0; i < WINDOW_HEIGHT - _LINE; i++) {
-    points[i] = [];
-    for (let z = 0; z < WINDOW_WIDTH; z++) {
-        points[i][z] = false;
-    }
-}
 const _parseCh = (cmd) => {
     switch (cmd) {
         case ncurses.KEY_DOWN:
@@ -304,7 +297,7 @@ function _refresh() {
     points = [];
     for (let i = 0; i < WINDOW_WIDTH; i++) {
         points[i] = [];
-        for (let z = 0; z < WINDOW_HEIGHT - _LINE; z++) {
+        for (let z = 0; z < WINDOW_HEIGHT; z++) {
             points[i][z] = false;
         }
     }
@@ -315,14 +308,14 @@ function _refresh() {
     }
     //bottom line
     for (let i = 0; i < WINDOW_WIDTH; i++) {
-        points[WINDOW_HEIGHT - _LINE][i] = true;
+        points[WINDOW_HEIGHT - 1][i] = true;
     }
     //left line
-    for (let i = 1; i < WINDOW_HEIGHT - _LINE; i++) {
+    for (let i = 1; i < WINDOW_HEIGHT - 1; i++) {
         points[i][0] = true;
     }
     //right line
-    for (let i = 1; i < WINDOW_HEIGHT - _LINE; i++) {
+    for (let i = 1; i < WINDOW_HEIGHT - 1; i++) {
         points[i][WINDOW_WIDTH - 1] = true;
     }
     ncurses.hide_cur(0);
