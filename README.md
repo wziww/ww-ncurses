@@ -19,9 +19,16 @@ ncurses.initsrc();
 
 #### 光标相关
 - hide_cur(int)         0 隐藏光标 1 显示光标
+```
+ncurses.hide_cur(1);
+```
 #### 字体相关
 - A_NORMAL              常规
 - A_BOLD                加粗
+- A_UNDERLINE           下划线
+```
+用法：ncurses.mvaddch(10, 10,"*".charCodeAt(0) | ncurses.A_UNDERLINE);
+```
 #### 按键相关
 - KEY_DOWN
 - KEY_UP
@@ -30,9 +37,16 @@ ncurses.initsrc();
 #### 颜色相关
 - start_color()         开始上色
 - use_default_colors()  使用默认颜色
-- init_pair(int,A,B)    自定义颜色    int 自定义颜色下标 A ncurses 定义的内颜色常量  B ncurses 定义的外颜色常量   如：init_pair(1, ncurses.COLOR_RED, ncurses.COLOR_BLACK)
+- init_pair(int,A,B)    自定义颜色    
+```
+int 自定义颜色下标 A ncurses 定义的内颜色常量  B ncurses 定义的外颜色常量   如：
+ncurses.init_pair(1, ncurses.COLOR_RED, ncurses.COLOR_BLACK)
+```
+- attron(int)           使用自定义颜色下标开始着色 如：定义了一个颜色的下标为 1 则 attron(1);
+- attroff(int)          停止某个下标颜色的着色
+
 ---
-##### 常量
+##### 颜色常量
 - COLOR_BLACK
 - COLOR_RED
 - COLOR_GREEN
