@@ -295,9 +295,9 @@ const _parseCh = (cmd) => {
 
 function _refresh() {
     points = [];
-    for (let i = 0; i < WINDOW_WIDTH; i++) {
+    for (let i = 0; i < WINDOW_HEIGHT; i++) {
         points[i] = [];
-        for (let z = 0; z < WINDOW_HEIGHT; z++) {
+        for (let z = 0; z < WINDOW_WIDTH; z++) {
             points[i][z] = false;
         }
     }
@@ -325,7 +325,7 @@ draw();
 const delLine = (INDEX, bool) => {
     if (!bool) return;
     for (let i = INDEX; i > 1; i--) {
-        for (let z = 1; z < WINDOW_WIDTH - 1; z++) {
+        for (let z = 1; z < WINDOW_WIDTH - 2; z++) {
             points[i][z] = points[i - 1][z];
         }
     }
@@ -342,7 +342,6 @@ const checkScore = () => {
     }
 }
 const move = (cmd, _class) => {
-    _refresh
     switch (cmd) {
         case ncurses.KEY_DOWN:
             if (_class.down() === 'new') {
