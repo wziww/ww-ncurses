@@ -379,9 +379,9 @@ if (cluster.isMaster) {
         ncurses.endwin();
         process.exit(0);
     }
-    setInterval(() => {
-        if (move(ncurses.KEY_DOWN, CURRENT_NODE) === 'q') return quit();
-    }, 300);
+    // setInterval(() => {
+    //     if (move(ncurses.KEY_DOWN, CURRENT_NODE) === 'q') return quit();
+    // }, 300);
     // setInterval(() => {}, 1000);
     const child = cluster.fork();
     process.on('uncaughtException', function (err) {
