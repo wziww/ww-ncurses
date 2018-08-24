@@ -94,7 +94,14 @@ NAN_METHOD(mvaddCh)
   int val = info[2]->Uint32Value();
   mvaddch(x, y, val);
 }
-
+NAN_METHOD(mvvLine)
+{
+  int x = info[0]->Uint32Value();
+  int y = info[1]->Uint32Value();
+  int val = info[2]->Uint32Value();
+  int len = info[3]->Uint32Value();
+  mvvline(x, y, val, len);
+}
 NAN_METHOD(mvprintw)
 {
   int x = info[0]->Uint32Value();
@@ -188,6 +195,7 @@ NAN_MODULE_INIT(InitAll)
   // move & addch
   Set(target, New<String>("mvaddch").ToLocalChecked(), GetFunction(New<FunctionTemplate>(mvaddCh)).ToLocalChecked());
 
+  Set(target, New<String>("mvvline").ToLocalChecked(), GetFunction(New<FunctionTemplate>(mvvLine)).ToLocalChecked());
   // 移动到某个位置后输出
   Set(target, New<String>("mvprintw").ToLocalChecked(), GetFunction(New<FunctionTemplate>(mvprintw)).ToLocalChecked());
 

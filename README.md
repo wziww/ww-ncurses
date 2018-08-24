@@ -20,6 +20,11 @@ ncurses.initsrc();
 - row()                 获取窗口「行数」
 - endwin()              结束窗口
 - refresh()             将缓冲区内字符显示到窗口上
+#### 线条相关
+- mvvLine(int, int, char, int);  画一条以 y,x 为起点的, 以某个字符为内容的, 指定长度的水平线条
+```
+ncurses.mvvLine(0, 0, '*'.charCpdeAt(0),20);   // 在 0, 0 点画一条 **************** 水平线
+```
 #### 输入相关
 - addch(char)           添加「单个」字符
 ```
