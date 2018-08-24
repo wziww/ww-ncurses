@@ -4,7 +4,7 @@ const ncurses = require('./index');
 const {
     CLI,
     parseCh
-} = require('./index')
+} = require('./index');
 ncurses.initscr();
 ncurses.clear();
 ncurses.noecho();
@@ -13,21 +13,36 @@ const READ_SNACK = 1;
 ncurses.start_color();
 ncurses.use_default_colors();
 ncurses.init_pair(READ_SNACK, ncurses.COLOR_RED, ncurses.COLOR_WHITE);
-let s = new CLI({
-    height: ncurses.row() - 4,
-    width: 20,
-    left: 0
-});
-s.draw();
+let s1 = new CLI({
+    height: parseInt(ncurses.row() / 2),
+    width: parseInt(ncurses.col() / 2),
+    left: 0,
+    char:'─'
+})
 let s2 = new CLI({
-    height: ncurses.row() - 4,
-    width: 20,
-    left: 29
+    height: parseInt(ncurses.row() / 2),
+    width: ncurses.col() - parseInt(ncurses.col() / 2),
+    left: parseInt(ncurses.col() / 2) - 1
 });
-s2.setTips().draw();
-s2.select({
-}).draw();
-
+let s3 = new CLI({
+    height: parseInt(ncurses.row() / 2),
+    width: parseInt(ncurses.col() / 2),
+    top: parseInt(ncurses.row() / 2) - 1,
+    left: 0
+})
+let s4 = new CLI({
+    height: parseInt(ncurses.row() / 2),
+    width: ncurses.col() - parseInt(ncurses.col() / 2),
+    top: parseInt(ncurses.row() / 2) - 1,
+    left: parseInt(ncurses.col() / 2) - 1
+});
+s2.draw();
+s3.draw();
+s4.draw();
+const winCluster = new CLI.cluster([s1, s2, s3, s4], {
+    color: READ_SNACK
+});
+winCluster._selected();
 if (cluster.isMaster) {
     const quit = () => {
         const spawn = child_process.spawnSync;
@@ -43,13 +58,11 @@ if (cluster.isMaster) {
         if (cmd == 'q') {
             return quit();
         } else {
-            if(cmd===ncurses.KEY_RIGHT){
-                s.unSelect().draw();
-                s2.select({color: READ_SNACK}).draw();
+            if (cmd === ncurses.KEY_RIGHT) {
+                winCluster.next(true);
             }
-            if(cmd===ncurses.KEY_LEFT){
-                s2.unSelect().draw();
-                s.select({color: READ_SNACK}).draw();
+            if (cmd === ncurses.KEY_LEFT) {
+                winCluster.prev(true);
             }
         }
     });
