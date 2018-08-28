@@ -6,13 +6,7 @@ npm install ww-ncurses --save
 var ncurses = require('ww-ncurses');
 ncurses.initsrc();
 ```
-## 基本概念
-方向：· → y
-     ↓
-     x
-终端左上角坐标为 (0,0)
 ### API 基本使用方式同步于 ncurses 在 C/CPP 中的使用方式
-
 #### 窗口相关
 - initscr()             初始化窗口
 - clear()               清屏
@@ -20,6 +14,27 @@ ncurses.initsrc();
 - row()                 获取窗口「行数」
 - endwin()              结束窗口
 - refresh()             将缓冲区内字符显示到窗口上
+#### win 类
+```
+var ncurses = require('ww-ncurses');
+var { win } = ncurses;
+var win1 = new win(options); // 实例化窗口
+```
+##### options
+- width=0   窗口宽度
+- height=0  窗口高度
+- x=0       窗口起始坐标 X
+- y=0       窗口起始坐标 Y
+- title=null 窗口标题
+- innerColor 窗口内部文字颜色
+- innerIndex 窗口内部文字选中索引
+
+##### win 类方法
+- .inner(array) 填充窗口内选项
+- .Box() 窗口边框绘制
+- .draw() 窗口内容绘制
+- .selected(options) 窗口设置选中状态
+
 #### 线条相关
 - mvvLine(int, int, char, int);  画一条以 y,x 为起点的, 以某个字符为内容的, 指定长度的水平线条
 ```
