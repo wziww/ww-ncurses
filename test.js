@@ -2,47 +2,50 @@ const cluster = require('cluster');
 const child_process = require('child_process');
 const ncurses = require('./index');
 const {
-    CLI,
+    win,
     parseCh
 } = require('./index');
+const win_color = 1;
 ncurses.initscr();
-ncurses.clear();
-ncurses.noecho();
-ncurses.hide_cur(0);
-const READ_SNACK = 1;
 ncurses.start_color();
 ncurses.use_default_colors();
-ncurses.init_pair(READ_SNACK, ncurses.COLOR_RED, ncurses.COLOR_WHITE);
-let s1 = new CLI({
-    height: parseInt(ncurses.row() / 2),
-    width: parseInt(ncurses.col() / 2),
-    left: 0,
-    char:'─'
+ncurses.init_pair(win_color, ncurses.COLOR_RED, -1);
+ncurses.clear();
+ncurses.refresh();
+ncurses.noecho();
+ncurses.hide_cur(0);
+let s1 = new win({
+    width: parseInt(ncurses.row() / 2) - 1,
+    height: parseInt(ncurses.col() / 2),
+    x: 0,
+    char: 0
 })
-let s2 = new CLI({
-    height: parseInt(ncurses.row() / 2),
-    width: ncurses.col() - parseInt(ncurses.col() / 2),
-    left: parseInt(ncurses.col() / 2) - 1
+let s2 = new win({
+    width: parseInt(ncurses.row() / 2) - 1,
+    height: ncurses.col() - parseInt(ncurses.col() / 2),
+    x: parseInt(ncurses.col() / 2)
 });
-let s3 = new CLI({
-    height: parseInt(ncurses.row() / 2),
-    width: parseInt(ncurses.col() / 2),
-    top: parseInt(ncurses.row() / 2) - 1,
-    left: 0
+let s3 = new win({
+    width: parseInt(ncurses.row() / 2) - 1,
+    height: parseInt(ncurses.col() / 2),
+    y: parseInt(ncurses.row() / 2) - 1,
+    x: 0
 })
-let s4 = new CLI({
-    height: parseInt(ncurses.row() / 2),
-    width: ncurses.col() - parseInt(ncurses.col() / 2),
-    top: parseInt(ncurses.row() / 2) - 1,
-    left: parseInt(ncurses.col() / 2) - 1
+let s4 = new win({
+    width: parseInt(ncurses.row() / 2) - 1,
+    height: ncurses.col() - parseInt(ncurses.col() / 2),
+    y: parseInt(ncurses.row() / 2) - 1,
+    x: parseInt(ncurses.col() / 2)
 });
-s2.draw();
-s3.draw();
-s4.draw();
-const winCluster = new CLI.cluster([s1, s2, s3, s4], {
-    color: READ_SNACK
+s1.selected({
+    color: win_color
 });
-winCluster._selected();
+s2.Box();
+s3.Box();
+s4.Box();
+const winCluster = new win.cluster([s1, s2, s3, s4], {
+    color: win_color
+});
 if (cluster.isMaster) {
     const quit = () => {
         const spawn = child_process.spawnSync;

@@ -15,5 +15,5 @@ const parseCh = (cmd) => {
             return String.fromCharCode(cmd);
     }
 }
-exports.CLI = require('./lib/CLI');
+exports.win = require('./lib/winhelper');
 exports.parseCh = parseCh;
