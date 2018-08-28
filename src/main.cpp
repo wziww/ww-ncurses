@@ -5,6 +5,7 @@
 #include <unistd.h>
 #include "./win.cpp"
 #include <iostream>
+#include "./lib.cpp"
 struct winsize w; // w.ws_row w.ws_col
 using Nan::GetFunction;
 using Nan::New;
@@ -13,11 +14,6 @@ using v8::FunctionTemplate;
 using v8::Local;
 using v8::Number;
 using v8::String;
-const char *ToCString(Local<String> str)
-{
-  String::Utf8Value value(str);
-  return *value ? *value : "<string conversion failed>";
-}
 NAN_METHOD(attron_)
 {
   int i = info[0]->Uint32Value();
