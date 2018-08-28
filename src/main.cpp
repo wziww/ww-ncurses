@@ -1,8 +1,9 @@
 #include <nan.h>
-#include <curses.h>
+#include <ncurses.h>
 #include <sys/ioctl.h>
 #include <stdio.h>
 #include <unistd.h>
+#include "./win.cpp"
 #include <iostream>
 struct winsize w; // w.ws_row w.ws_col
 using Nan::GetFunction;
@@ -248,6 +249,8 @@ NAN_MODULE_INIT(InitAll)
   Set(target, New<String>("COLOR_CYAN").ToLocalChecked(), New<Number>(COLOR_CYAN));
 
   Set(target, New<String>("COLOR_WHITE").ToLocalChecked(), New<Number>(COLOR_WHITE));
+  
+  Win::Init(target);
 }
 
 NODE_MODULE(ncurses, InitAll)
