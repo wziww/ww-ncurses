@@ -22,7 +22,7 @@ let s1 = new win({
     height: ncurses.row(),
     width: parseInt(ncurses.col() / 2 - 1),
     x: 0,
-    title: 'I\'m title!!!',
+    title: 'I\'m title!!!   / press q to quit',
     innerColor: INNER_COLOR,
     innerIndex: 0
 });
@@ -32,7 +32,8 @@ let s2 = new win({
     x: parseInt(ncurses.col() / 2) + 1,
     title: 'I\'m title!!!',
     innerColor: INNER_COLOR,
-    innerIndex: 0
+    innerIndex: 0,
+    ScrollBar:false
 })
 s2.inner([{
     value: 'shit',
