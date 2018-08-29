@@ -20,12 +20,24 @@ const inner_color_1 = 3;
 ncurses.init_pair(inner_color_1, ncurses.COLOR_WHITE, -1);
 let s1 = new win({
     height: ncurses.row(),
-    width: ncurses.col(),
+    width: parseInt(ncurses.col() / 2 - 1),
     x: 0,
     title: 'I\'m title!!!',
     innerColor: INNER_COLOR,
     innerIndex: 0
+});
+let s2 = new win({
+    height: ncurses.row(),
+    width: parseInt(ncurses.col() / 2 - 1),
+    x: parseInt(ncurses.col() / 2) + 1,
+    title: 'I\'m title!!!',
+    innerColor: INNER_COLOR,
+    innerIndex: 0
 })
+s2.inner([{
+    value: 'shit',
+    index:true
+}]).Box().draw();
 s1.inner([{
     value: 'what???',
     index: true,
@@ -166,8 +178,10 @@ s1.inner([{
     value: 'that',
     index: true,
     color: inner_color_1
-}]).Box().draw()
-const winCluster = new win.cluster([s1], {
+}]).Box().selected({
+    color: win_color
+}).draw();
+const winCluster = new win.cluster([s1, s2], {
     color: win_color
 });
 if (cluster.isMaster) {
