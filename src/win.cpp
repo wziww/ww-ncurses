@@ -22,6 +22,7 @@ class Win : public Nan::ObjectWrap
         Nan::SetPrototypeMethod(tpl, "Wattron", Wattron);
         Nan::SetPrototypeMethod(tpl, "Wattroff", Wattroff);
         Nan::SetPrototypeMethod(tpl, "Mvwprintw", Mvwprintw);
+        Nan::SetPrototypeMethod(tpl, "Wclear", Wclear);
         my_constructor.Reset(Nan::GetFunction(tpl).ToLocalChecked());
         Nan::Set(target, Nan::New<v8::String>("Win").ToLocalChecked(), Nan::GetFunction(tpl).ToLocalChecked());
     }
@@ -65,9 +66,14 @@ class Win : public Nan::ObjectWrap
         const char *str = ToCString(info[2]->ToString());
         mvwprintw(win->local_win, info[0]->Uint32Value(), info[1]->Uint32Value(), str);
     }
+    static NAN_METHOD(Wclear)
+    {
+        Win *win = Nan::ObjectWrap::Unwrap<Win>(info.This());
+        wclear(win->local_win);
+    }
 
   private:
-    explicit Win(int height = 0, int width = 0, int starty = 0, int startx = 0) : _height(height), _width(width), _starty(starty), _startx(startx)
+    explicit Win(int width = 0, int height = 0, int starty = 0, int startx = 0) : _height(height), _width(width), _starty(starty), _startx(startx)
     {
         this->local_win = newwin(height, width, starty, startx);
     }
@@ -80,7 +86,7 @@ class Win : public Nan::ObjectWrap
             int height = info[1]->Uint32Value();
             int starty = info[2]->Uint32Value();
             int startx = info[3]->Uint32Value();
-            Win *win = new Win(height, width, starty, startx);
+            Win *win = new Win(width, height, starty, startx);
             win->Wrap(info.This());
             info.GetReturnValue().Set(info.This());
         }
